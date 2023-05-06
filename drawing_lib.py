@@ -65,7 +65,7 @@ def draw_lines(viewport, point_a, point_b, active, layer):
     x1, y1 = real_to_screen(point_a)
     x2, y2 = real_to_screen(point_b)
     line_mult = 1 + active
-    print(line_mult)
+
     viewport.canvas.create_line(x1, y1, x2, y2, width = layer.line_width * line_mult, fill = layer.colour, smooth=True)
 
 def draw_label(viewport, point):
@@ -74,6 +74,10 @@ def draw_label(viewport, point):
     label =  str(x) + ", " + str(y)
 
     viewport.canvas.create_text(xr, yr - (15), text=label, font=("Roboto", int(8)))
+
+def rgb_to_hex(rgb):
+
+    return '#{:02x}{:02x}{:02x}'.format(*rgb)
 
 
 

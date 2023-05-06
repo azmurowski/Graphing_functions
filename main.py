@@ -1,5 +1,6 @@
 from tkinter import *
 import drawing_lib as dl
+import numpy as np
 
 
 class Viewport:
@@ -30,14 +31,16 @@ class Viewport:
         if not self.layers[self.active_layer].check_if_point_exists(screen_pos):
             real_pos = dl.screen_to_real(screen_pos)
             self.layers[self.active_layer].points.append(real_pos)
-            print(screen_pos, real_pos, self.active_layer)
+
             self.draw()
 
     def add_layer(self):
-        colour = self.colours[len(self.layers)%len(self.colours)]
-        self.layers.append(Layer(self, colour))
+
+        self.layers.append(Layer(self))
+
         self.active_layer = len(self.layers)-1
         new_layer = len(self.layers)-1
+        colour = self.layers[self.active_layer].colour
         b = Button(self.layer_screen, width = 30, height = 3, text= 'Layer ' + str(new_layer), command= lambda:my_viewport.set_layer(new_layer), relief=SUNKEN, bg = colour )
         b.pack()
         self.buttons.append(b)
@@ -57,7 +60,7 @@ class Viewport:
         if self.layers:
             xr, yr = mouse_position.x, mouse_position.y
             x, y = dl.screen_to_real((xr, yr))
-            print(x,y)
+
             for i, point in enumerate(self.layers[self.active_layer].points):
                 if point[0] == x and point[1] == y:
                     self.layers[self.active_layer].selected = i
@@ -117,11 +120,11 @@ class Viewport:
 
 class Layer:
 
-    def __init__(self, parent_viewport, colour):
+    def __init__(self, parent_viewport):
         self.index = len(parent_viewport.layers)
         self.parent = parent_viewport
         self.points = []
-        self.colour = colour
+        self.colour =  dl.rgb_to_hex(list(np.random.choice(range(256), size=3)))
         self.line_width = 1
         self.selected = -1
 
