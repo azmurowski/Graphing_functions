@@ -1,4 +1,4 @@
-Double click to create point. You can add points anywhere and they will be sorted by x coordinate
+Double click to create points. You can add points anywhere and they will be sorted by x coordinate and connected by a line
 In the beginning a new layer is created - this is where you insert points of the function - this is shown with a button on the side
 Clicking a button that's active deactivates the layer and allows you to create a new one by creating points in the viewport
 You can move points by clicking and dragging
