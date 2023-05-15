@@ -61,6 +61,14 @@ def draw_point(viewport,point, active, layer):
     viewport.canvas.create_rectangle(x - point_radius, y - point_radius, x + point_radius,
                                      y + point_radius, fill=layer.colour, outline = layer.colour)
 
+def draw_point_scale(viewport,point, active, layer, scale):
+
+    point_radius = viewport.point_radius * (1+active) * scale
+    fill = viewport.point_fill
+    x, y = real_to_screen(point.position)
+    viewport.canvas.create_rectangle(x - point_radius, y - point_radius, x + point_radius,
+                                     y + point_radius, fill=layer.colour, outline = layer.colour)
+
 def draw_lines(viewport, point_a, point_b, active, layer):
     x1, y1 = real_to_screen(point_a)
     x2, y2 = real_to_screen(point_b)
@@ -79,7 +87,36 @@ def rgb_to_hex(rgb):
 
     return '#{:02x}{:02x}{:02x}'.format(*rgb)
 
+def lerp(a: float, b: float, t: float) -> float:
+    """Linear interpolate on the scale given by a to b, using t as the point on that scale.
+    Examples
+    --------
+        50 == lerp(0, 100, 0.5)
+        4.2 == lerp(1, 5, 0.8)
+    """
+    return (1 - t) * a + t * b
 
+
+def inv_lerp(a: float, b: float, v: float) -> float:
+    """Inverse Linar Interpolation, get the fraction between a and b on which v resides.
+    Examples
+    --------
+        0.5 == inv_lerp(0, 100, 50)
+        0.8 == inv_lerp(1, 5, 4.2)
+    """
+    return (v - a) / (b - a)
+
+
+def remap(i_min: float, i_max: float, o_min: float, o_max: float, v: float) -> float:
+    """Remap values from one linear scale to another, a combination of lerp and inv_lerp.
+    i_min and i_max are the scale on which the original value resides,
+    o_min and o_max are the scale to which it should be mapped.
+    Examples
+    --------
+        45 == remap(0, 100, 40, 50, 50)
+        6.2 == remap(1, 5, 3, 7, 4.2)
+    """
+    return lerp(o_min, o_max, inv_lerp(i_min, i_max, v))
 # this is a change
 
 
